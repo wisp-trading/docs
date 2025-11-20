@@ -8,18 +8,18 @@
 
 :root {
   /* Slate Gray Color Palette */
-  --ifm-color-primary: #64748b;
-  --ifm-color-primary-dark: #475569;
-  --ifm-color-primary-darker: #334155;
-  --ifm-color-primary-darkest: #1e293b;
-  --ifm-color-primary-light: #94a3b8;
-  --ifm-color-primary-lighter: #cbd5e1;
-  --ifm-color-primary-lightest: #e2e8f0;
+  --ifm-color-primary: #475569;
+  --ifm-color-primary-dark: #334155;
+  --ifm-color-primary-darker: #1e293b;
+  --ifm-color-primary-darkest: #0f172a;
+  --ifm-color-primary-light: #64748b;
+  --ifm-color-primary-lighter: #94a3b8;
+  --ifm-color-primary-lightest: #cbd5e1;
   
-  /* Accent Colors - Bronze/Gold for Greek feel */
-  --kronos-accent: #d4a574;
-  --kronos-accent-dark: #b8935f;
-  --kronos-accent-light: #e8c9a8;
+  /* Accent Colors - Darker bronze/gold for better light mode contrast */
+  --kronos-accent: #b8935f;
+  --kronos-accent-dark: #8b6f47;
+  --kronos-accent-light: #d4a574;
   
   /* Typography */
   --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
@@ -34,6 +34,10 @@
   /* Background */
   --ifm-background-color: #f8fafc;
   --ifm-navbar-background-color: #ffffff;
+  
+  /* Text colors for better light mode readability */
+  --ifm-font-color-base: #1e293b;
+  --ifm-heading-color: #0f172a;
   
   /* Code blocks */
   --docusaurus-highlighted-code-line-bg: rgba(100, 116, 139, 0.1);
@@ -57,6 +61,11 @@
   /* Accent in dark mode */
   --kronos-accent: #e8c9a8;
   --kronos-accent-dark: #d4a574;
+  --kronos-accent-light: #f4dfc3;
+  
+  /* Text colors for dark mode */
+  --ifm-font-color-base: #e2e8f0;
+  --ifm-heading-color: #f1f5f9;
   
   --docusaurus-highlighted-code-line-bg: rgba(148, 163, 184, 0.15);
 }
@@ -68,28 +77,44 @@
   font-weight: 700;
   font-size: 1.3em;
   margin-right: 0.3rem;
-  color: var(--kronos-accent);
+  color: var(--kronos-accent-dark);
   vertical-align: middle;
+}
+
+[data-theme='dark'] .navbar__title::before {
+  color: var(--kronos-accent-light);
 }
 
 /* Styled headings with subtle Greek border */
 .markdown h1 {
-  border-bottom: 3px solid var(--kronos-accent);
+  border-bottom: 3px solid var(--kronos-accent-dark);
   padding-bottom: 0.5rem;
   margin-bottom: 1.5rem;
+  color: var(--ifm-color-primary-darkest);
 }
 
 .markdown h2 {
-  border-left: 4px solid var(--kronos-accent);
+  border-left: 4px solid var(--kronos-accent-dark);
   padding-left: 1rem;
   margin-top: 2rem;
+  color: var(--ifm-color-primary-darker);
+}
+
+[data-theme='dark'] .markdown h1 {
+  border-bottom-color: var(--kronos-accent);
+  color: var(--ifm-color-primary-lightest);
+}
+
+[data-theme='dark'] .markdown h2 {
+  border-left-color: var(--kronos-accent);
+  color: var(--ifm-color-primary-lighter);
 }
 
 /* Enhanced code blocks */
 div[class^='codeBlockContainer'] {
-  border: 1px solid var(--ifm-color-primary-lighter);
+  border: 1px solid #cbd5e1;
   border-radius: var(--ifm-card-border-radius);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme='dark'] div[class^='codeBlockContainer'] {
@@ -99,43 +124,119 @@ div[class^='codeBlockContainer'] {
 
 /* Styled links with bronze accent */
 .markdown a {
-  color: var(--kronos-accent-dark);
+  color: #1e40af;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s;
 }
 
 .markdown a:hover {
-  border-bottom-color: var(--kronos-accent);
+  color: var(--kronos-accent-dark);
+  border-bottom-color: var(--kronos-accent-dark);
 }
 
 [data-theme='dark'] .markdown a {
+  color: var(--kronos-accent-light);
+}
+
+[data-theme='dark'] .markdown a:hover {
   color: var(--kronos-accent);
+  border-bottom-color: var(--kronos-accent);
 }
 
 /* Enhanced sidebar */
 .theme-doc-sidebar-container {
-  border-right: 2px solid var(--ifm-color-primary-lightest);
+  border-right: 1px solid #e2e8f0;
 }
 
 [data-theme='dark'] .theme-doc-sidebar-container {
   border-right-color: var(--ifm-color-primary-darkest);
 }
 
+/* Sidebar menu items */
+.theme-doc-sidebar-item-link {
+  color: var(--ifm-color-primary-darker);
+}
+
+.menu__link--active {
+  color: var(--ifm-color-primary-darkest);
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .theme-doc-sidebar-item-link {
+  color: var(--ifm-color-primary-lighter);
+}
+
+[data-theme='dark'] .menu__link--active {
+  color: var(--ifm-color-primary-lightest);
+  background-color: var(--ifm-color-primary-darkest);
+}
+
 /* Greek meander pattern on footer (subtle) */
 .footer {
-  border-top: 3px solid var(--kronos-accent);
-  background: linear-gradient(
-    to bottom,
-    var(--ifm-footer-background-color),
-    var(--ifm-background-color)
-  );
+  border-top: 3px solid var(--kronos-accent-dark);
+}
+
+[data-theme='dark'] .footer {
+  border-top-color: var(--kronos-accent);
 }
 
 /* Styled admonitions */
 .admonition {
   border-left-width: 4px;
   border-radius: var(--ifm-border-radius);
+  border: 1px solid;
+}
+
+.admonition-note {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.admonition-tip {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+.admonition-info {
+  border-color: #06b6d4;
+  background-color: #ecfeff;
+}
+
+.admonition-warning {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+
+.admonition-danger {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+[data-theme='dark'] .admonition-note {
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+[data-theme='dark'] .admonition-tip {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+[data-theme='dark'] .admonition-info {
+  border-color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.1);
+}
+
+[data-theme='dark'] .admonition-warning {
+  border-color: #f59e0b;
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+[data-theme='dark'] .admonition-danger {
+  border-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
 }
 
 /* Enhanced buttons */
@@ -151,23 +252,75 @@ div[class^='codeBlockContainer'] {
   box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
 }
 
+/* Homepage Get Started button - make it more prominent */
+.button--secondary {
+  background-color: var(--ifm-color-primary-darker);
+  color: #ffffff;
+  border: 2px solid var(--ifm-color-primary-darkest);
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.button--secondary:hover {
+  background-color: var(--ifm-color-primary-darkest);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.4);
+  border-color: var(--kronos-accent-dark);
+}
+
+[data-theme='dark'] .button--secondary {
+  background-color: var(--kronos-accent-dark);
+  color: var(--ifm-color-primary-darkest);
+  border-color: var(--kronos-accent);
+}
+
+[data-theme='dark'] .button--secondary:hover {
+  background-color: var(--kronos-accent);
+  color: var(--ifm-color-primary-darkest);
+  border-color: var(--kronos-accent-light);
+}
+
 /* Table of contents accent */
 .table-of-contents__link--active {
-  color: var(--kronos-accent-dark);
-  border-left-color: var(--kronos-accent);
+  color: var(--ifm-color-primary-darker);
+  border-left-color: var(--kronos-accent-dark);
+  font-weight: 600;
 }
 
 [data-theme='dark'] .table-of-contents__link--active {
-  color: var(--kronos-accent);
+  color: var(--kronos-accent-light);
+  border-left-color: var(--kronos-accent);
 }
 
 /* Navbar subtle enhancement */
 .navbar {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.navbar__link {
+  color: var(--ifm-color-primary-darker);
+  font-weight: 500;
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: var(--ifm-color-primary-darkest);
 }
 
 [data-theme='dark'] .navbar {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border-bottom-color: var(--ifm-color-primary-darkest);
+}
+
+[data-theme='dark'] .navbar__link {
+  color: var(--ifm-color-primary-lighter);
+}
+
+[data-theme='dark'] .navbar__link:hover,
+[data-theme='dark'] .navbar__link--active {
+  color: var(--ifm-color-primary-lightest);
 }
 
 /* Homepage hero section */
@@ -175,38 +328,78 @@ div[class^='codeBlockContainer'] {
   background: linear-gradient(
     135deg,
     var(--ifm-background-color) 0%,
-    var(--ifm-color-primary-lightest) 100%
+    #e2e8f0 100%
   );
-  border-bottom: 3px solid var(--kronos-accent);
+  border-bottom: 3px solid var(--kronos-accent-dark);
 }
 
 [data-theme='dark'] .hero {
   background: linear-gradient(
     135deg,
     var(--ifm-background-color) 0%,
-    var(--ifm-color-primary-darkest) 100%
+    #1e293b 100%
   );
+  border-bottom-color: var(--kronos-accent);
 }
 
 /* Strategy overview boxes */
 .markdown > p > strong:first-child {
-  color: var(--kronos-accent-dark);
+  color: var(--ifm-color-primary-darker);
 }
 
 [data-theme='dark'] .markdown > p > strong:first-child {
-  color: var(--kronos-accent);
+  color: var(--kronos-accent-light);
 }
 
 /* Inline code with slate styling */
 code {
-  background-color: var(--ifm-color-primary-lightest);
-  border: 1px solid var(--ifm-color-primary-lighter);
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
+  font-weight: 500;
 }
 
 [data-theme='dark'] code {
-  background-color: var(--ifm-color-primary-darkest);
-  border-color: var(--ifm-color-primary-darker);
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+/* Color mode toggle button styling */
+.navbar__item button[class*='toggle'],
+.navbar__item button[title*='mode'],
+button[class*='colorModeToggle'],
+button[class*='toggleButton'] {
+  border: 2px solid #94a3b8 !important;
+  border-radius: 6px;
+  padding: 0.25rem;
+  background-color: #ffffff;
+}
+
+.navbar__item button[class*='toggle']:hover,
+.navbar__item button[title*='mode']:hover,
+button[class*='colorModeToggle']:hover,
+button[class*='toggleButton']:hover {
+  background-color: #f1f5f9 !important;
+  border-color: #64748b !important;
+}
+
+[data-theme='dark'] .navbar__item button[class*='toggle'],
+[data-theme='dark'] .navbar__item button[title*='mode'],
+[data-theme='dark'] button[class*='colorModeToggle'],
+[data-theme='dark'] button[class*='toggleButton'] {
+  border-color: #64748b !important;
+  background-color: #1e293b;
+}
+
+[data-theme='dark'] .navbar__item button[class*='toggle']:hover,
+[data-theme='dark'] .navbar__item button[title*='mode']:hover,
+[data-theme='dark'] button[class*='colorModeToggle']:hover,
+[data-theme='dark'] button[class*='toggleButton']:hover {
+  background-color: #334155 !important;
+  border-color: #94a3b8 !important;
 }
 
