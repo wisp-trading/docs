@@ -251,5 +251,5 @@ kronos live --config config.prod.yaml
 ## Next Steps
 
 - **[Writing Strategies](writing-strategies)** - Build your strategy
-- **[Examples](examples)** - See complete implementations
+- **[Examples](../examples)** - See complete implementations
 - **[Installation](installation)** - Deploy to production

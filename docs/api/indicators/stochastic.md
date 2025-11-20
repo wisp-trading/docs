@@ -427,7 +427,7 @@ func (s *StochasticStrategy) GetStrategyType() strategy.StrategyType {
 
 - [RSI](rsi) - Another momentum oscillator
 - [MACD](macd) - Trend-following indicator
-- [Bollinger Bands](bollinger) - Volatility-based indicator
+- [Bollinger Bands](bollinger-bands) - Volatility-based indicator
 
 ## References
 

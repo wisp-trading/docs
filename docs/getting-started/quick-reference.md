@@ -332,5 +332,5 @@ func (s *RSIStrategy) GetStrategyType() strategy.StrategyType {
 ## Next Steps
 
 - **[Writing Strategies](writing-strategies)** - Deep dive into strategy patterns
-- **[Examples](examples)** - Common strategy implementations
+- **[Examples](../examples)** - Common strategy implementations
 - **[Indicators Reference](../api/indicators/rsi)** - Full indicator documentation

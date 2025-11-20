@@ -140,4 +140,3 @@ Consider adding:
 ## Related Strategies
 
 - [Portfolio](portfolio) - Multi-asset management
-- [Best Price Execution](best-price) - Always use best exchange

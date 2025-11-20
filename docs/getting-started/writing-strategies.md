@@ -475,6 +475,6 @@ func (s *TrendStrategy) GetSignals() ([]*strategy.Signal, error) {
 
 ## Next Steps
 
-- **[Examples](examples)** - See complete strategy implementations
+- **[Examples](../examples)** - See complete strategy implementations
 - **[Configuration](configuration)** - Configure exchanges and parameters
 - **[Indicators Reference](../api/indicators/rsi)** - Full indicator documentation
