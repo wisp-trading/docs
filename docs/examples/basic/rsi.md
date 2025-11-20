@@ -19,17 +19,18 @@ Classic momentum strategy using RSI oversold/overbought levels.
 package main
 
 import (
-	sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type RSIStrategy struct {
-	k *sdk.Kronos
+	strategy.BaseStrategy
+	k kronos.Kronos
 }
 
-func NewRSI(k *sdk.Kronos) *RSIStrategy {
+func NewRSI(k kronos.Kronos) strategy.Strategy {
 	return &RSIStrategy{k: k}
 }
 

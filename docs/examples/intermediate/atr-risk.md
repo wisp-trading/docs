@@ -19,17 +19,18 @@ Dynamic stops and position sizing based on volatility.
 package main
 
 import (
-	sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type ATRRiskManaged struct {
-	k *sdk.Kronos
+	strategy.BaseStrategy
+	k kronos.Kronos
 }
 
-func NewATRRiskManaged(k *sdk.Kronos) *ATRRiskManaged {
+func NewATRRiskManaged(k kronos.Kronos) strategy.Strategy {
 	return &ATRRiskManaged{k: k}
 }
 

@@ -19,18 +19,19 @@ Trade multiple assets with individual analysis and allocation.
 package main
 
 import (
-	sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/portfolio"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type Portfolio struct {
-	k *sdk.Kronos
+	strategy.BaseStrategy
+	k kronos.Kronos
 }
 
-func NewPortfolio(k *sdk.Kronos) *Portfolio {
+func NewPortfolio(k kronos.Kronos) strategy.Strategy {
 	return &Portfolio{k: k}
 }
 

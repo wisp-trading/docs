@@ -336,16 +336,17 @@ if stoch.K.LessThan(decimal.NewFromInt(20)) &&
 package main
 
 import (
-    sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
+    "github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
     "github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type StochasticStrategy struct {
-    k *sdk.Kronos
+    strategy.BaseStrategy
+    k kronos.Kronos
 }
 
-func NewStochastic(k *sdk.Kronos) *StochasticStrategy {
+func NewStochastic(k kronos.Kronos) strategy.Strategy {
     return &StochasticStrategy{k: k}
 }
 

@@ -12,7 +12,8 @@ Every strategy has access to the Kronos SDK through `k`:
 
 ```go
 type MyStrategy struct {
-    k *sdk.Kronos  // Your gateway to everything
+    strategy.BaseStrategy
+    k kronos.Kronos  // Your gateway to everything
 }
 ```
 
@@ -267,16 +268,17 @@ A simple RSI strategy:
 package main
 
 import (
-    sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
+    "github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
     "github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type RSIStrategy struct {
-    k *sdk.Kronos
+    strategy.BaseStrategy
+    k kronos.Kronos
 }
 
-func NewRSI(k *sdk.Kronos) *RSIStrategy {
+func NewRSI(k kronos.Kronos) strategy.Strategy {
     return &RSIStrategy{k: k}
 }
 

@@ -319,16 +319,17 @@ if price.GreaterThan(sma50) {
 package main
 
 import (
-    sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
+    "github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
     "github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type MAStrategy struct {
-    k *sdk.Kronos
+    strategy.BaseStrategy
+    k kronos.Kronos
 }
 
-func NewMA(k *sdk.Kronos) *MAStrategy {
+func NewMA(k kronos.Kronos) strategy.Strategy {
     return &MAStrategy{k: k}
 }
 
