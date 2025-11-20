@@ -29,5 +29,5 @@ Already installed? Jump to **[Quick Reference](quick-reference)** to learn the c
 ## Next Steps
 
 After completing this section, explore:
-- **[Examples](../examples/index)** - Complete strategy implementations
+- **[Examples](../examples)** - Complete strategy implementations
 - **[API Reference](../api/indicators/rsi)** - Full indicator documentation
