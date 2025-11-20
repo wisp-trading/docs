@@ -19,17 +19,18 @@ Golden cross / death cross trend following strategy.
 package main
 
 import (
-	sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type MACrossover struct {
-	k *sdk.Kronos
+	strategy.BaseStrategy
+	k kronos.Kronos
 }
 
-func NewMACrossover(k *sdk.Kronos) *MACrossover {
+func NewMACrossover(k kronos.Kronos) strategy.Strategy {
 	return &MACrossover{k: k}
 }
 

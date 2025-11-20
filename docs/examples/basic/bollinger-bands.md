@@ -19,17 +19,18 @@ Buy at lower band, sell at upper band - fade extremes.
 package main
 
 import (
-	sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type BollingerMeanReversion struct {
-	k *sdk.Kronos
+	strategy.BaseStrategy
+	k kronos.Kronos
 }
 
-func NewBollingerMR(k *sdk.Kronos) *BollingerMeanReversion {
+func NewBollingerMR(k kronos.Kronos) strategy.Strategy {
 	return &BollingerMeanReversion{k: k}
 }
 

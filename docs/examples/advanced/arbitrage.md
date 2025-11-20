@@ -19,17 +19,18 @@ Find and exploit price differences across exchanges.
 package main
 
 import (
-    sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
     "github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+    "github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
     "github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type Arbitrage struct {
-    k *sdk.Kronos
+    strategy.BaseStrategy
+    k kronos.Kronos
 }
 
-func NewArbitrage(k *sdk.Kronos) *Arbitrage {
+func NewArbitrage(k kronos.Kronos) strategy.Strategy {
     return &Arbitrage{k: k}
 }
 

@@ -19,17 +19,18 @@ Trade MACD crossovers only with the prevailing trend.
 package main
 
 import (
-	sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
 	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type MACDMomentum struct {
-	k *sdk.Kronos
+	strategy.BaseStrategy
+	k kronos.Kronos
 }
 
-func NewMACDMomentum(k *sdk.Kronos) *MACDMomentum {
+func NewMACDMomentum(k kronos.Kronos) strategy.Strategy {
 	return &MACDMomentum{k: k}
 }
 

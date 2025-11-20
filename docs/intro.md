@@ -111,16 +111,17 @@ Here's a full working strategy:
 package main
 
 import (
-    sdk "github.com/backtesting-org/kronos-sdk/pkg/kronos"
+    "github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
     "github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type MomentumStrategy struct {
-    k *sdk.Kronos
+    strategy.BaseStrategy
+    k kronos.Kronos
 }
 
-func NewMomentum(k *sdk.Kronos) *MomentumStrategy {
+func NewMomentum(k kronos.Kronos) strategy.Strategy {
     return &MomentumStrategy{k: k}
 }
 
