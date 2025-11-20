@@ -46,7 +46,7 @@ const config: Config = {
           editUrl:
             'https://github.com/backtesting-org/kronos-sdk/tree/main/documentation/',
         },
-        blog: true, // Disable blog
+        blog: false, // Disable blog
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -58,6 +58,8 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
       respectPrefersColorScheme: false,
     },
     navbar: {
