@@ -1,73 +1,27 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
 .heroBanner {
-  padding: 6rem 2rem;
+  padding: 8rem 2rem;
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-}
-
-[data-theme='dark'] .heroBanner {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-}
-
-.heroBanner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0.03;
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 50px,
-    #64748b 50px,
-    #64748b 51px
-  );
-  pointer-events: none;
+  background: #000000;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .heroBanner h1 {
-  font-size: 3.5rem;
+  font-size: 4rem;
   font-weight: 700;
-  color: #1e293b;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
   margin-bottom: 1.5rem;
-}
-
-[data-theme='dark'] .heroBanner h1 {
-  color: #f1f5f9;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.02em;
 }
 
 .heroBanner p {
   font-size: 1.5rem;
-  color: #475569;
-  margin-bottom: 2rem;
-}
-
-[data-theme='dark'] .heroBanner p {
-  color: #cbd5e1;
-}
-
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 4rem 1rem;
-  }
-  
-  .heroBanner h1 {
-    font-size: 2.5rem;
-  }
-  
-  .heroBanner p {
-    font-size: 1.25rem;
-  }
+  color: #a1a1aa;
+  margin-bottom: 2.5rem;
 }
 
 .buttons {
@@ -77,14 +31,62 @@
   gap: 1rem;
 }
 
+/* Glassmorphic button with teal accent */
 .buttons .button {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 0.9375rem;
+  padding: 0.875rem 2rem;
+  border-radius: 9999px;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .buttons .button:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.4);
+  color: #00d4ff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(100, 116, 139, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
 }
 
+/* Teal ripple effect */
+.buttons .button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(0, 212, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.buttons .button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 5rem 1.5rem;
+  }
+
+  .heroBanner h1 {
+    font-size: 2.5rem;
+  }
+
+  .heroBanner p {
+    font-size: 1.25rem;
+  }
+}
