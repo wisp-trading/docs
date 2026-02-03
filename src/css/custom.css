@@ -355,16 +355,51 @@ table tbody tr:hover {
   border-left-color: #ef4444;
 }
 
-/* Footer */
+/* Footer - Dark Minimal */
 .footer {
-  background: var(--wisp-bg-tertiary);
-  border-top: 1px solid var(--wisp-border-default);
+  background: var(--wisp-bg-primary);
+  border-top: 1px solid var(--wisp-border-subtle);
   color: var(--wisp-text-muted);
   font-size: 0.875rem;
+  padding: 3rem 0 2rem;
+}
+
+.footer__title {
+  color: var(--wisp-text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.footer__item {
+  margin: 0.5rem 0;
+}
+
+.footer__link-item {
+  color: var(--wisp-text-muted);
+  transition: color var(--wisp-transition-fast);
+  font-size: 0.875rem;
+  line-height: 1.6;
 }
 
 .footer__link-item:hover {
   color: var(--wisp-teal);
+  text-decoration: none;
+}
+
+.footer__copyright {
+  color: var(--wisp-text-disabled);
+  font-size: 0.8125rem;
+  margin-top: 2rem;
+  text-align: center;
+  border-top: 1px solid var(--wisp-border-subtle);
+  padding-top: 2rem;
+}
+
+.footer__links {
+  margin-bottom: 1.5rem;
 }
 
 /* Selection */
@@ -378,3 +413,4 @@ table tbody tr:hover {
   outline: 2px solid var(--wisp-teal);
   outline-offset: 2px;
 }
+
