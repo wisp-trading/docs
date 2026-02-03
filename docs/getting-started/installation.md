@@ -6,12 +6,31 @@ sidebar_position: 1
 
 Get up and running with wisp in minutes.
 
-## Install wisp CLI
+## Prerequisites
 
-Install via Homebrew:
+You'll need Go installed to build and use wisp:
+
+- **Go 1.24+** - [Install Go](https://go.dev/doc/install)
+
+Check your Go version:
 
 ```bash
-brew install backtesting-org/tap/wisp
+go version
+```
+
+## Install wisp CLI
+
+Download the wisp repository from GitHub:
+
+```bash
+git clone https://github.com/wisp-trading/wisp
+cd wisp
+```
+
+Build and install wisp:
+
+```bash
+make install
 ```
 
 Verify the installation:
@@ -20,17 +39,6 @@ Verify the installation:
 wisp --version
 ```
 
-## Prerequisites
-
-You'll need Go installed to write strategies:
-
-- **Go 1.21+** - [Install Go](https://go.dev/doc/install)
-
-Check your Go version:
-
-```bash
-go version
-```
 
 ## Create a New Strategy
 
