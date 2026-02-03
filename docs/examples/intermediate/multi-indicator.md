@@ -19,18 +19,18 @@ Require multiple indicators to agree before trading.
 package main
 
 import (
-	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
-	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
-	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
+	"github.com/wisp-trading/sdk/pkg/types/connector"
+	"github.com/wisp-trading/sdk/pkg/types/wisp"
+	"github.com/wisp-trading/sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type MultiConfirmation struct {
 	strategy.BaseStrategy
-	k kronos.Kronos
+	k wisp.wisp
 }
 
-func NewMultiConfirmation(k kronos.Kronos) strategy.Strategy {
+func NewMultiConfirmation(k wisp.wisp) strategy.Strategy {
 	return &MultiConfirmation{k: k}
 }
 
@@ -98,7 +98,7 @@ func (s *MultiConfirmation) GetStrategyType() strategy.StrategyType { return str
 Run with:
 
 ```bash
-kronos backtest
+wisp backtest
 ```
 
 Expected characteristics:

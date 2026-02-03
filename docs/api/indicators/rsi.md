@@ -304,17 +304,17 @@ if rsi.LessThan(oversoldLevel) {
 package main
 
 import (
-    "github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
-    "github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
+    "github.com/wisp-trading/sdk/pkg/types/wisp"
+    "github.com/wisp-trading/sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type RSIStrategy struct {
     strategy.BaseStrategy
-    k kronos.Kronos
+    k wisp.wisp
 }
 
-func NewRSI(k kronos.Kronos) strategy.Strategy {
+func NewRSI(k wisp.wisp) strategy.Strategy {
     return &RSIStrategy{k: k}
 }
 
@@ -380,6 +380,6 @@ func (s *RSIStrategy) GetStrategyType() strategy.StrategyType { return strategy.
 
 ## References
 
-- **Go Package**: [pkg.go.dev](https://pkg.go.dev/github.com/backtesting-org/kronos-sdk/pkg/analytics/indicators#RSI)
-- **Source Code**: [rsi.go](https://github.com/backtesting-org/kronos-sdk/blob/main/pkg/analytics/indicators/rsi.go)
+- **Go Package**: [pkg.go.dev](https://pkg.go.dev/github.com/wisp-trading/sdk/pkg/analytics/indicators#RSI)
+- **Source Code**: [rsi.go](https://github.com/wisp-trading/sdk/blob/main/pkg/analytics/indicators/rsi.go)
 - **Theory**: [Investopedia - RSI](https://www.investopedia.com/terms/r/rsi.asp)

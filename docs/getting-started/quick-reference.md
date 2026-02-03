@@ -4,16 +4,16 @@ sidebar_position: 2
 
 # Quick Reference
 
-Essential concepts for writing Kronos strategies.
+Essential concepts for writing wisp strategies.
 
-## The Kronos Context
+## The wisp Context
 
-Every strategy has access to the Kronos SDK through `k`:
+Every strategy has access to the wisp SDK through `k`:
 
 ```go
 type MyStrategy struct {
     strategy.BaseStrategy
-    k kronos.Kronos  // Your gateway to everything
+    k wisp.wisp  // Your gateway to everything
 }
 ```
 
@@ -34,7 +34,7 @@ eth := s.k.Asset("ETH")
 sol := s.k.Asset("SOL")
 ```
 
-Assets are just references. Kronos knows which exchange to use based on your config.
+Assets are just references. wisp knows which exchange to use based on your config.
 
 ## Indicators
 
@@ -68,7 +68,7 @@ s.k.Log().Debug("Stochastic", btc.Symbol(), "K: %s, D: %s", stoch.K, stoch.D)
 atr := s.k.Indicators().ATR(btc, 14)
 ```
 
-Kronos automatically:
+wisp automatically:
 1. Fetches the required price data
 2. Calculates the indicator
 3. Returns the latest value
@@ -78,8 +78,8 @@ Kronos automatically:
 Specify exchange or interval when needed:
 
 ```go
-import "github.com/backtesting-org/kronos-sdk/pkg/kronos/indicators"
-import "github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+import "github.com/wisp-trading/sdk/pkg/wisp/indicators"
+import "github.com/wisp-trading/sdk/pkg/types/connector"
 
 // Use specific exchange
 rsi := s.k.Indicators().RSI(btc, 14, indicators.IndicatorOptions{
@@ -134,7 +134,7 @@ klines := s.k.Market().Klines(btc, "1h", 100)  // Last 100 1h candles
 Create trading signals with the fluent API:
 
 ```go
-import "github.com/backtesting-org/kronos-sdk/pkg/types/connector"
+import "github.com/wisp-trading/sdk/pkg/types/connector"
 
 // Buy signal - specify asset, exchange, and quantity
 signal := s.k.Signal(s.GetName()).
@@ -183,7 +183,7 @@ func (s *Strategy) GetSignals() ([]*strategy.Signal, error) {
 
 ## Working with Decimals
 
-Kronos uses `decimal.Decimal` for all financial calculations:
+wisp uses `decimal.Decimal` for all financial calculations:
 
 ```go
 import "github.com/shopspring/decimal"
@@ -268,24 +268,24 @@ A simple RSI strategy:
 package main
 
 import (
-    "github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
-    "github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
+    "github.com/wisp-trading/sdk/pkg/types/wisp"
+    "github.com/wisp-trading/sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type RSIStrategy struct {
     strategy.BaseStrategy
-    k kronos.Kronos
+    k wisp.wisp
 }
 
-func NewRSI(k kronos.Kronos) strategy.Strategy {
+func NewRSI(k wisp.wisp) strategy.Strategy {
     return &RSIStrategy{k: k}
 }
 
 func (s *RSIStrategy) GetSignals() ([]*strategy.Signal, error) {
     btc := s.k.Asset("BTC")
     
-    // Get RSI - Kronos handles everything
+    // Get RSI - wisp handles everything
     rsi := s.k.Indicators().RSI(btc, 14)
     
     // Buy when oversold

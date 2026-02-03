@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Kronos',
+  title: 'Wisp',
   tagline: 'The Traders Framework',
   favicon: 'img/favicon.ico',
 
@@ -15,15 +15,15 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://usewisp.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'backtesting-org', // Usually your GitHub org/user name.
-  projectName: 'kronos-sdk', // Usually your repo name.
+  organizationName: 'wisp-trading', // Usually your GitHub org/user name.
+  projectName: 'wisp', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -44,7 +44,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/backtesting-org/kronos-sdk/tree/main/documentation/',
+            'https://github.com/wisp-trading/wisp/tree/main/documentation/',
         },
         blog: false, // Disable blog
         theme: {
@@ -65,7 +65,7 @@ const config: Config = {
     navbar: {
       title: '',
       // logo: {
-        // alt: 'Kronos SDK Logo',
+        // alt: 'wisp SDK Logo',
         // src: 'img/logo.svg',
       // },
       items: [
@@ -76,7 +76,7 @@ const config: Config = {
           label: 'Documentation',
         },
         {
-          href: 'https://github.com/backtesting-org/kronos-sdk',
+          href: 'https://github.com/wisp-trading/wisp',
           label: 'GitHub',
           position: 'right',
         },
@@ -103,16 +103,16 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/backtesting-org/kronos-sdk',
+              href: 'https://github.com/wisp-trading/wisp',
             },
             {
               label: 'Issues',
-              href: 'https://github.com/backtesting-org/kronos-sdk/issues',
+              href: 'https://github.com/wisp-trading/wisp/issues',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Kronos SDK.`,
+      copyright: `Copyright © ${new Date().getFullYear()} wisp.`,
     },
     prism: {
       theme: prismThemes.github,

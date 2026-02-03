@@ -19,18 +19,18 @@ Golden cross / death cross trend following strategy.
 package main
 
 import (
-	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
-	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
-	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
+	"github.com/wisp-trading/sdk/pkg/types/connector"
+	"github.com/wisp-trading/sdk/pkg/types/wisp"
+	"github.com/wisp-trading/sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type MACrossover struct {
 	strategy.BaseStrategy
-	k kronos.Kronos
+	k wisp.wisp
 }
 
-func NewMACrossover(k kronos.Kronos) strategy.Strategy {
+func NewMACrossover(k wisp.wisp) strategy.Strategy {
 	return &MACrossover{k: k}
 }
 
@@ -87,7 +87,7 @@ func (s *MACrossover) GetStrategyType() strategy.StrategyType { return strategy.
 Run with:
 
 ```bash
-kronos backtest
+wisp backtest
 ```
 
 Expected characteristics:

@@ -19,18 +19,18 @@ Buy at lower band, sell at upper band - fade extremes.
 package main
 
 import (
-	"github.com/backtesting-org/kronos-sdk/pkg/types/connector"
-	"github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
-	"github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
+	"github.com/wisp-trading/sdk/pkg/types/connector"
+	"github.com/wisp-trading/sdk/pkg/types/wisp"
+	"github.com/wisp-trading/sdk/pkg/types/strategy"
 	"github.com/shopspring/decimal"
 )
 
 type BollingerMeanReversion struct {
 	strategy.BaseStrategy
-	k kronos.Kronos
+	k wisp.wisp
 }
 
-func NewBollingerMR(k kronos.Kronos) strategy.Strategy {
+func NewBollingerMR(k wisp.wisp) strategy.Strategy {
 	return &BollingerMeanReversion{k: k}
 }
 
@@ -89,7 +89,7 @@ func (s *BollingerMeanReversion) GetStrategyType() strategy.StrategyType { retur
 Run with:
 
 ```bash
-kronos backtest
+wisp backtest
 ```
 
 Expected characteristics:

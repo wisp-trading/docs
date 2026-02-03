@@ -336,17 +336,17 @@ if stoch.K.LessThan(decimal.NewFromInt(20)) &&
 package main
 
 import (
-    "github.com/backtesting-org/kronos-sdk/pkg/types/kronos"
-    "github.com/backtesting-org/kronos-sdk/pkg/types/strategy"
+    "github.com/wisp-trading/sdk/pkg/types/wisp"
+    "github.com/wisp-trading/sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type StochasticStrategy struct {
     strategy.BaseStrategy
-    k kronos.Kronos
+    k wisp.wisp
 }
 
-func NewStochastic(k kronos.Kronos) strategy.Strategy {
+func NewStochastic(k wisp.wisp) strategy.Strategy {
     return &StochasticStrategy{k: k}
 }
 
@@ -432,6 +432,6 @@ func (s *StochasticStrategy) GetStrategyType() strategy.StrategyType {
 
 ## References
 
-- **Go Package**: [pkg.go.dev](https://pkg.go.dev/github.com/backtesting-org/kronos-sdk/pkg/analytics/indicators#Stochastic)
-- **Source Code**: [stochastic.go](https://github.com/backtesting-org/kronos-sdk/blob/main/pkg/analytics/indicators/stochastic.go)
+- **Go Package**: [pkg.go.dev](https://pkg.go.dev/github.com/wisp-trading/sdk/pkg/analytics/indicators#Stochastic)
+- **Source Code**: [stochastic.go](https://github.com/wisp-trading/sdk/blob/main/pkg/analytics/indicators/stochastic.go)
 - **Theory**: [Investopedia - Stochastic Oscillator](https://www.investopedia.com/terms/s/stochasticoscillator.asp)

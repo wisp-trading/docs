@@ -26,7 +26,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         Don&apos;t worry about exchange APIs or data management.
-        Focus on writing your strategies, Kronos handles the rest.
+        Focus on writing your strategies, wisp handles the rest.
       </>
     ),
   },
