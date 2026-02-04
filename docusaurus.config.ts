@@ -8,17 +8,17 @@ const config: Config = {
   title: 'Wisp',
   tagline: 'The Traders Framework',
   favicon: 'img/favicon.ico',
-  trailingSlash: false,
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
+
   // Set the production url of your site here
-  url: 'https://usewisp.dev',
+  url: 'https://docs.usewisp.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/docs',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -45,7 +45,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/wisp-trading/wisp/tree/main/documentation/',
+              'https://github.com/wisp-trading/wisp/tree/main/documentation/',
         },
         blog: false, // Disable blog
         theme: {
@@ -66,8 +66,8 @@ const config: Config = {
     navbar: {
       title: '',
       // logo: {
-        // alt: 'wisp SDK Logo',
-        // src: 'img/logo.svg',
+      // alt: 'wisp SDK Logo',
+      // src: 'img/logo.svg',
       // },
       items: [
         {
@@ -91,11 +91,11 @@ const config: Config = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/intro',
+              to: '/intro',
             },
             {
               label: 'API Reference',
-              to: '/docs/intro',
+              to: '/intro',
             },
           ],
         },
