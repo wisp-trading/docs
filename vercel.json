@@ -1,9 +1,13 @@
 {
-  "redirects": [
+  "headers": [
     {
-      "source": "/:path*",
-      "destination": "https://usewisp.dev/docs/:path*",
-      "permanent": true
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
     }
   ]
 }

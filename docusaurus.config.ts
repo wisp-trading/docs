@@ -8,7 +8,6 @@ const config: Config = {
   title: 'Wisp',
   tagline: 'The Traders Framework',
   favicon: 'img/favicon.ico',
-  trailingSlash: false,
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -16,10 +15,10 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://docs.usewisp.dev',
+  url: 'https://usewisp.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/docs',
+  baseUrl: '/docs/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -41,7 +40,7 @@ const config: Config = {
       'classic',
       {
         docs: {
-          path: "content",
+          path: 'content',
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
