@@ -7,14 +7,12 @@ import styles from './styles.module.css';
 
 type FeatureItem = {
     title: string;
-    image: string;
     description: ReactNode;
 };
 
 const FeatureList: FeatureItem[] = [
     {
         title: 'Type-Safe by Design',
-        image: require('@site/static/img/kronos_arrow.png').default,
         description: (
             <>
                 Write strategies with full IDE autocomplete and compile-time guarantees.
@@ -24,7 +22,6 @@ const FeatureList: FeatureItem[] = [
     },
     {
         title: 'Focus on Strategy Logic',
-        image: require('@site/static/img/kronos_target.png').default,
         description: (
             <>
                 Don't worry about exchange APIs or data management. Focus on writing
@@ -34,7 +31,6 @@ const FeatureList: FeatureItem[] = [
     },
     {
         title: 'Write Once, Run Anywhere',
-        image: require('@site/static/img/kronos_result.png').default,
         description: (
             <>
                 Same code works in backtesting and live trading. No environment-specific
