@@ -10,24 +10,24 @@ Learn from complete, production-ready strategy implementations organized by comp
 
 Perfect for getting started with wisp. These strategies use 1-2 indicators and simple logic.
 
-- **[RSI Strategy](basic/rsi)** - Classic momentum with oversold/overbought levels
-- **[Moving Average Crossover](basic/ma-crossover)** - Golden/death cross trend following
-- **[Bollinger Bands Mean Reversion](basic/bollinger-bands)** - Fade extremes, target the middle
+- **[RSI Strategy](/examples/basic/rsi)** - Classic momentum with oversold/overbought levels
+- **[Moving Average Crossover](/examples/basic/ma-crossover)** - Golden/death cross trend following
+- **[Bollinger Bands Mean Reversion](/examples/basic/bollinger-bands)** - Fade extremes, target the middle
 
 ## Intermediate Strategies
 
 Add sophistication with multiple indicators, filters, and risk management.
 
-- **[Multi-Indicator Confirmation](intermediate/multi-indicator)** - Require 3/4 signals to agree
-- **[MACD with Trend Filter](intermediate/macd-momentum)** - Only trade with prevailing trend
-- **[ATR Risk Management](intermediate/atr-risk)** - Dynamic stops and position sizing
+- **[Multi-Indicator Confirmation](/examples/intermediate/multi-indicator)** - Require 3/4 signals to agree
+- **[MACD with Trend Filter](/examples/intermediate/macd-momentum)** - Only trade with prevailing trend
+- **[ATR Risk Management](/examples/intermediate/atr-risk)** - Dynamic stops and position sizing
 
 ## Advanced Strategies
 
 Complex strategies for experienced traders: portfolios, arbitrage, and multi-asset.
 
-- **[Portfolio Strategy](advanced/portfolio)** - Trade multiple assets with individual analysis
-- **[Cross-Exchange Arbitrage](advanced/arbitrage)** - Exploit price differences across exchanges
+- **[Portfolio Strategy](/examples/advanced/portfolio)** - Trade multiple assets with individual analysis
+- **[Cross-Exchange Arbitrage](/examples/advanced/arbitrage)** - Exploit price differences across exchanges
 
 ## Using These Examples
 

@@ -373,9 +373,8 @@ wisp is built on these principles:
 
 ## Community
 
-- **GitHub**: [backtesting-org/wisp-sdk](https://github.com/wisp-trading/sdk)
-- **Issues**: [Report bugs or request features](https://github.com/wisp-trading/sdk/issues)
-- **Go Docs**: [pkg.go.dev](https://pkg.go.dev/github.com/wisp-trading/sdk)
+- **GitHub**: [Wisp](https://github.com/wisp-trading/wisp)
+- **Issues**: [Report bugs or request features](https://github.com/wisp-trading/wisp/issues)
 
 ## License
 
