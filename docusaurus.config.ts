@@ -8,6 +8,7 @@ const config: Config = {
   title: 'Wisp',
   tagline: 'The Traders Framework',
   favicon: 'img/favicon.ico',
+  trailingSlash: false,
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
