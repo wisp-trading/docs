@@ -17,6 +17,13 @@ const sidebars: SidebarsConfig = {
     'intro',
     {
       type: 'category',
+      label: 'Concepts',
+      items: [
+        'concepts/event-driven',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Getting Started',
       link: {
         type: 'doc',

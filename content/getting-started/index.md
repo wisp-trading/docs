@@ -11,6 +11,7 @@ Welcome to wisp SDK. This section will help you get up and running quickly.
 - **[Installation](/getting-started/installation)** - Install wisp CLI, create your first strategy, run backtests and deploy live
 - **[Quick Reference](/getting-started/quick-reference)** - Essential API concepts: assets, indicators, signals, decimals, and logging
 - **[Writing Strategies](/getting-started/writing-strategies)** - Deep dive into building sophisticated strategies
+- **[Event-Driven Architecture](/concepts/event-driven)** - Architecture deep dive: strategy-owned loops, async signals, and lifecycle
 - **[Configuration](/getting-started/configuration)** - Configure exchanges, strategy settings, and production deployment
 
 ## New to wisp?
