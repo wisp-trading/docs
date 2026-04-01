@@ -1,5 +1,7 @@
 ---
 sidebar_position: 5
+description: "Bollinger Bands indicator API. Measure volatility and identify overbought/oversold. Returns Upper, Middle, Lower bands."
+keywords: ["Bollinger Bands", "volatility", "bands", "mean reversion", "indicator API"]
 ---
 
 # Bollinger Bands
@@ -7,14 +9,19 @@ sidebar_position: 5
 ## Usage
 
 ```go
-// Basic usage (20, 2.0 is standard)
-bb := s.k.Indicators().BollingerBands(btc, 20, 2.0)
+// In your run() loop
+btc := s.w.Asset("BTC")
+usdt := s.w.Asset("USDT")
+pair := s.w.Pair(btc, usdt)
 
-s.k.Log().Debug("Bollinger Bands", btc.Symbol(), "Upper: %s, Middle: %s, Lower: %s",
+// Basic usage (20, 2.0 is standard)
+bb := s.w.Indicators().BollingerBands(pair, 20, 2.0)
+
+s.w.Log().MarketCondition("BB Upper: %.2f, Middle: %.2f, Lower: %.2f",
     bb.Upper, bb.Middle, bb.Lower)
 
-// With options
-bb := s.k.Indicators().BollingerBands(btc, 20, 2.0, indicators.IndicatorOptions{
+// With options - specific timeframe
+bb := s.w.Indicators().BollingerBands(pair, 20, 2.0, indicators.IndicatorOptions{
     Interval: "1h",
 })
 ```
@@ -22,35 +29,42 @@ bb := s.k.Indicators().BollingerBands(btc, 20, 2.0, indicators.IndicatorOptions{
 ## In a Strategy
 
 ```go
-func (s *Strategy) GetSignals() ([]*strategy.Signal, error) {
-    btc := s.k.Asset("BTC")
-    
-    price := s.k.Market().Price(btc)
-    bb := s.k.Indicators().BollingerBands(btc, 20, 2.0)
-    
-    // Buy when price touches lower band
-    if price.LessThan(bb.Lower) {
-        return []*strategy.Signal{
-            s.Signal().
-                Buy(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason("Price below lower Bollinger Band").
-                Build(),
-        }, nil
+// In your run() loop
+func (s *Strategy) run(ctx context.Context) {
+    ticker := time.NewTicker(1 * time.Hour)
+    defer ticker.Stop()
+
+    btc := s.w.Asset("BTC")
+    usdt := s.w.Asset("USDT")
+    pair := s.w.Pair(btc, usdt)
+
+    for {
+        select {
+        case <-ticker.C:
+            price := s.w.Spot().Price(pair)
+            bb := s.w.Indicators().BollingerBands(pair, 20, 2.0)
+
+            // Buy when price touches lower band
+            if price.LessThan(bb.Lower) {
+                signal := s.w.Spot().Signal(s.name).
+                    BuyMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)
+                s.w.Log().Opportunity(string(s.name), "BTC",
+                    "Price below lower BB: %.2f < %.2f", price, bb.Lower)
+            }
+
+            // Sell when price touches upper band
+            if price.GreaterThan(bb.Upper) {
+                signal := s.w.Spot().Signal(s.name).
+                    SellMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)
+                s.w.Log().Opportunity(string(s.name), "BTC",
+                    "Price above upper BB: %.2f > %.2f", price, bb.Upper)
+            }
+        }
     }
-    
-    // Sell when price touches upper band
-    if price.GreaterThan(bb.Upper) {
-        return []*strategy.Signal{
-            s.Signal().
-                Sell(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason("Price above upper Bollinger Band").
-                Build(),
-        }, nil
-    }
-    
-    return nil, nil
 }
 ```
 

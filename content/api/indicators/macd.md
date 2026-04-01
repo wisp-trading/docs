@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+description: "MACD (Moving Average Convergence Divergence) indicator API. Detect momentum and crossovers. Returns MACD, Signal, Histogram lines."
+keywords: ["MACD", "momentum", "crossover", "EMA", "indicator API", "trend"]
 ---
 
 # MACD (Moving Average Convergence Divergence)
@@ -7,14 +9,19 @@ sidebar_position: 4
 ## Usage
 
 ```go
-// Basic usage (12, 26, 9 is standard)
-macd := s.k.Indicators().MACD(btc, 12, 26, 9)
+// In your run() loop
+btc := s.w.Asset("BTC")
+usdt := s.w.Asset("USDT")
+pair := s.w.Pair(btc, usdt)
 
-s.k.Log().Debug("MACD", btc.Symbol(), "MACD: %s, Signal: %s, Histogram: %s",
+// Basic usage (12, 26, 9 is standard)
+macd := s.w.Indicators().MACD(pair, 12, 26, 9)
+
+s.w.Log().MarketCondition("MACD: %.4f, Signal: %.4f, Histogram: %.4f",
     macd.MACD, macd.Signal, macd.Histogram)
 
-// With options
-macd := s.k.Indicators().MACD(btc, 12, 26, 9, indicators.IndicatorOptions{
+// With options - specific timeframe
+macd := s.w.Indicators().MACD(pair, 12, 26, 9, indicators.IndicatorOptions{
     Interval: "4h",
 })
 ```
@@ -22,34 +29,41 @@ macd := s.k.Indicators().MACD(btc, 12, 26, 9, indicators.IndicatorOptions{
 ## In a Strategy
 
 ```go
-func (s *Strategy) GetSignals() ([]*strategy.Signal, error) {
-    btc := s.k.Asset("BTC")
-    
-    macd := s.k.Indicators().MACD(btc, 12, 26, 9)
-    
-    // Bullish crossover: MACD crosses above Signal
-    if macd.MACD.GreaterThan(macd.Signal) && macd.Histogram.GreaterThan(decimal.Zero) {
-        return []*strategy.Signal{
-            s.Signal().
-                Buy(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason("MACD bullish crossover").
-                Build(),
-        }, nil
+// In your run() loop
+func (s *Strategy) run(ctx context.Context) {
+    ticker := time.NewTicker(1 * time.Hour)
+    defer ticker.Stop()
+
+    btc := s.w.Asset("BTC")
+    usdt := s.w.Asset("USDT")
+    pair := s.w.Pair(btc, usdt)
+
+    for {
+        select {
+        case <-ticker.C:
+            macd := s.w.Indicators().MACD(pair, 12, 26, 9)
+
+            // Bullish crossover: MACD crosses above Signal
+            if macd.MACD.GreaterThan(macd.Signal) && macd.Histogram.GreaterThan(decimal.Zero) {
+                signal := s.w.Spot().Signal(s.name).
+                    BuyMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)
+                s.w.Log().Opportunity(string(s.name), "BTC",
+                    "MACD bullish crossover: MACD=%.4f > Signal=%.4f", macd.MACD, macd.Signal)
+            }
+
+            // Bearish crossover: MACD crosses below Signal
+            if macd.MACD.LessThan(macd.Signal) && macd.Histogram.LessThan(decimal.Zero) {
+                signal := s.w.Spot().Signal(s.name).
+                    SellMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)
+                s.w.Log().Opportunity(string(s.name), "BTC",
+                    "MACD bearish crossover: MACD=%.4f < Signal=%.4f", macd.MACD, macd.Signal)
+            }
+        }
     }
-    
-    // Bearish crossover: MACD crosses below Signal
-    if macd.MACD.LessThan(macd.Signal) && macd.Histogram.LessThan(decimal.Zero) {
-        return []*strategy.Signal{
-            s.Signal().
-                Sell(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason("MACD bearish crossover").
-                Build(),
-        }, nil
-    }
-    
-    return nil, nil
 }
 ```
 

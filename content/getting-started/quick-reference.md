@@ -1,28 +1,50 @@
 ---
 sidebar_position: 2
+description: "Wisp SDK quick reference. Essential APIs for Start/run/Emit pattern, indicators, market data, signals, and logging."
+keywords: ["quick reference", "API", "indicators", "market data", "signals", "Wisp SDK"]
 ---
 
 # Quick Reference
 
-Essential concepts for writing wisp strategies.
+API cheat sheet for writing wisp strategies with the event-driven Start/run/Emit pattern.
 
-## The wisp Context
+## The Wisp Context
 
-Every strategy has access to the wisp SDK through `k`:
+Every strategy has access to the full Wisp SDK:
 
 ```go
 type MyStrategy struct {
-    strategy.BaseStrategy
-    k wisp.wisp  // Your gateway to everything
+    w wisp.Wisp  // Your gateway to everything
 }
+
+// In Start() method:
+func (s *MyStrategy) Start(ctx context.Context) error {
+    go s.run(ctx)
+    return nil
+}
+
+// In run() method, access services via s.w:
+// - s.w.Asset("BTC")              // Get asset
+// - s.w.Pair(btc, usdt)           // Create pair
+// - s.w.Indicators()              // Technical analysis
+// - s.w.Spot()                    // Spot trading & data
+// - s.w.Perp()                    // Perpetuals trading
+// - s.w.Predict()                 // Prediction markets
+// - s.w.Activity()                // Positions, balances
+// - s.w.Log()                     // Structured logging
+// - s.w.Emit(signal)              // Send signal to executor
 ```
 
-The `k` instance provides:
-- **`k.Asset(symbol)`** - Get asset references
-- **`k.Indicators`** - Technical indicators
-- **`k.Market`** - Market data (prices, order books, funding)
-- **`k.Analytics`** - Market analytics
-- **`k.Log()`** - Structured logging
+### Lifecycle Methods
+
+Every strategy must implement:
+
+```go
+func (s *MyStrategy) Start(ctx context.Context) error      // Launch run() goroutine
+func (s *MyStrategy) Stop(ctx context.Context) error       // Clean shutdown
+func (s *MyStrategy) GetName() strategy.StrategyName       // Name identifier
+func (s *MyStrategy) Signals() <-chan strategy.Signal      // Signal stream
+```
 
 ## Assets
 
@@ -129,55 +151,118 @@ funding := s.k.Market().FundingRate(btc)
 klines := s.k.Market().Klines(btc, "1h", 100)  // Last 100 1h candles
 ```
 
-## Signals
+## Domain APIs: Spot, Perp, Predict
 
-Create trading signals with the fluent API:
+Access trading markets through domain-specific APIs:
+
+### Spot Markets (Buying & Selling)
 
 ```go
-import "github.com/wisp-trading/sdk/pkg/types/connector"
+// Watch a pair for price updates
+btc := s.w.Asset("BTC")
+usdt := s.w.Asset("USDT")
+pair := s.w.Pair(btc, usdt)
+s.w.Spot().WatchPair(connector.Binance, pair)
 
-// Buy signal - specify asset, exchange, and quantity
-signal := s.k.Signal(s.GetName()).
-    Buy(btc, connector.Binance, decimal.NewFromFloat(0.1)).
+// Get current price
+price := s.w.Spot().Price(pair)
+price := s.w.Spot().Price(pair, connector.Binance)  // Specific exchange
+
+// Create and emit buy signal
+signal := s.w.Spot().Signal(s.name).
+    BuyMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
     Build()
+s.w.Emit(signal)
 
 // Sell signal
-signal := s.k.Signal(s.GetName()).
-    Sell(btc, connector.Binance, decimal.NewFromFloat(0.1)).
+signal := s.w.Spot().Signal(s.name).
+    SellMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
     Build()
+s.w.Emit(signal)
 
-// Short sell signal
-signal := s.k.Signal(s.GetName()).
-    SellShort(btc, connector.Binance, decimal.NewFromFloat(0.1)).
+// Limit orders
+signal := s.w.Spot().Signal(s.name).
+    BuyLimit(pair, connector.Binance, decimal.NewFromFloat(0.1), decimal.NewFromInt(45000)).
     Build()
-
-// Limit orders with specific price
-signal := s.k.Signal(s.GetName()).
-    BuyLimit(btc, connector.Binance, decimal.NewFromFloat(0.1), decimal.NewFromInt(45000)).
-    Build()
-
-// Multiple trades in one signal (e.g., cash and carry)
-signal := s.k.Signal(s.GetName()).
-    Buy(btc, connector.Binance, decimal.NewFromFloat(0.1)).
-    SellShort(btc, connector.Bybit, decimal.NewFromFloat(0.1)).
-    Build()
+s.w.Emit(signal)
 ```
 
-Return signals from `GetSignals()`:
+### Perpetual Futures Markets (Leveraged Trading)
 
 ```go
-func (s *Strategy) GetSignals() ([]*strategy.Signal, error) {
-    btc := s.k.Asset("BTC")
-    rsi := s.k.Indicators().RSI(btc, 14)
-    
-    if rsi.LessThan(decimal.NewFromInt(30)) {
-        signal := s.k.Signal(s.GetName()).
-            Buy(btc, connector.Binance, decimal.NewFromFloat(0.1)).
-            Build()
-        return []*strategy.Signal{signal}, nil
+// Watch futures pair
+pair := s.w.Pair(btc, usdt)
+s.w.Perp().WatchPair(connector.Bybit, pair)
+
+// Get price
+price := s.w.Perp().Price(pair)
+
+// Leveraged long with 5x
+signal := s.w.Perp().Signal(s.name).
+    BuyMarket(pair, connector.Bybit,
+        decimal.NewFromFloat(0.1),  // quantity
+        decimal.NewFromInt(5)).      // 5x leverage
+    Build()
+s.w.Emit(signal)
+
+// Leveraged short with 3x
+signal := s.w.Perp().Signal(s.name).
+    SellMarket(pair, connector.Bybit,
+        decimal.NewFromFloat(0.1),  // quantity
+        decimal.NewFromInt(3)).      // 3x leverage
+    Build()
+s.w.Emit(signal)
+
+// Get funding rate (positive = longs pay shorts)
+fundingRate := s.w.Perp().FundingRate(pair)
+```
+
+### Prediction Markets
+
+```go
+// Watch a prediction market
+s.w.Predict().WatchMarket(connector.Polymarket,
+    "BTC above $50k by Jan 2026")
+
+// Buy shares in an outcome
+signal := s.w.Predict().Signal(s.name).
+    Buy(market, outcome,
+        connector.Polymarket,
+        shares,        // How many shares
+        maxPrice,      // Max price per share
+        expiry).       // Expiration time
+    Build()
+s.w.Emit(signal)
+```
+
+## Emitting Signals
+
+The event-driven pattern: analyze in your run loop, emit signals asynchronously:
+
+```go
+// In your run() loop:
+func (s *MyStrategy) run(ctx context.Context) {
+    ticker := time.NewTicker(1 * time.Hour)
+    defer ticker.Stop()
+
+    for {
+        select {
+        case <-ticker.C:
+            // Analyze market
+            rsi := s.w.Indicators().RSI(pair, 14)
+
+            // When signal condition met, emit asynchronously
+            if rsi.LessThan(decimal.NewFromInt(30)) {
+                signal := s.w.Spot().Signal(s.name).
+                    BuyMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)  // Push to executor
+                s.w.Log().Opportunity(string(s.name), "BTC", "RSI oversold")
+            }
+        case <-ctx.Done():
+            return
+        }
     }
-    
-    return nil, nil
 }
 ```
 
@@ -262,74 +347,126 @@ func (s *Strategy) GetSignals() ([]*strategy.Signal, error) {
 
 ## Complete Example
 
-A simple RSI strategy:
+A simple RSI strategy with the Start/run/Emit pattern:
 
 ```go
 package main
 
 import (
+    "context"
+    "time"
+    "github.com/wisp-trading/sdk/pkg/types/connector"
     "github.com/wisp-trading/sdk/pkg/types/wisp"
     "github.com/wisp-trading/sdk/pkg/types/strategy"
     "github.com/shopspring/decimal"
 )
 
 type RSIStrategy struct {
-    strategy.BaseStrategy
-    k wisp.wisp
+    w          wisp.Wisp
+    name       strategy.StrategyName
+    signalChan chan strategy.Signal
+    stopChan   chan struct{}
 }
 
-func NewRSI(k wisp.wisp) strategy.Strategy {
-    return &RSIStrategy{k: k}
+func NewRSI(w wisp.Wisp) *RSIStrategy {
+    return &RSIStrategy{
+        w:          w,
+        name:       strategy.Momentum,
+        signalChan: make(chan strategy.Signal, 10),
+        stopChan:   make(chan struct{}),
+    }
 }
 
-func (s *RSIStrategy) GetSignals() ([]*strategy.Signal, error) {
-    btc := s.k.Asset("BTC")
-    
-    // Get RSI - wisp handles everything
-    rsi := s.k.Indicators().RSI(btc, 14)
-    
-    // Buy when oversold
-    if rsi.LessThan(decimal.NewFromInt(30)) {
-        return []*strategy.Signal{
-            s.Signal().
-                Buy(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason("RSI oversold at " + rsi.String()).
-                Build(),
-        }, nil
+// Start launches the run goroutine (non-blocking)
+func (s *RSIStrategy) Start(ctx context.Context) error {
+    go s.run(ctx)
+    return nil
+}
+
+// run owns the execution loop
+func (s *RSIStrategy) run(ctx context.Context) {
+    ticker := time.NewTicker(1 * time.Hour)
+    defer ticker.Stop()
+
+    btc := s.w.Asset("BTC")
+    usdt := s.w.Asset("USDT")
+    pair := s.w.Pair(btc, usdt)
+
+    // Watch the pair
+    s.w.Spot().WatchPair(connector.Binance, pair)
+
+    for {
+        select {
+        case <-s.stopChan:
+            return
+        case <-ctx.Done():
+            return
+        case <-ticker.C:
+            // Analyze market
+            rsi := s.w.Indicators().RSI(pair, 14)
+            price := s.w.Spot().Price(pair)
+
+            // Buy when oversold
+            if rsi.LessThan(decimal.NewFromInt(30)) {
+                signal := s.w.Spot().Signal(s.name).
+                    BuyMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)
+                s.w.Log().Opportunity(string(s.name), "BTC",
+                    "RSI oversold at %.2f, Price=%.2f", rsi, price)
+            }
+
+            // Sell when overbought
+            if rsi.GreaterThan(decimal.NewFromInt(70)) {
+                signal := s.w.Spot().Signal(s.name).
+                    SellMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)
+                s.w.Log().Opportunity(string(s.name), "BTC",
+                    "RSI overbought at %.2f, Price=%.2f", rsi, price)
+            }
+        }
     }
-    
-    // Sell when overbought
-    if rsi.GreaterThan(decimal.NewFromInt(70)) {
-        return []*strategy.Signal{
-            s.Signal().
-                Sell(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason("RSI overbought at " + rsi.String()).
-                Build(),
-        }, nil
-    }
-    
-    return nil, nil
+}
+
+// Stop cleanly shuts down the strategy
+func (s *RSIStrategy) Stop(ctx context.Context) error {
+    close(s.stopChan)
+    return nil
 }
 
 // Required interface methods
-func (s *RSIStrategy) GetName() strategy.StrategyName { 
-    return "RSI" 
+func (s *RSIStrategy) GetName() strategy.StrategyName {
+    return s.name
 }
 
-func (s *RSIStrategy) GetDescription() string { 
-    return "Simple RSI momentum strategy" 
+func (s *RSIStrategy) Signals() <-chan strategy.Signal {
+    return s.signalChan
 }
 
-func (s *RSIStrategy) GetRiskLevel() strategy.RiskLevel { 
-    return strategy.RiskLevelMedium 
+func (s *RSIStrategy) LatestStatus() strategy.StrategyStatus {
+    return strategy.StrategyStatus{}
 }
 
-func (s *RSIStrategy) GetStrategyType() strategy.StrategyType { 
-    return strategy.StrategyTypeTechnical 
+func (s *RSIStrategy) StatusLog() []strategy.StrategyStatus {
+    return []strategy.StrategyStatus{}
 }
 ```
+
+## Best Practices
+
+**Start/run/Emit pattern:**
+- Non-blocking `Start()` that launches a goroutine
+- `run()` owns the execution loop with tickers/channels
+- `Emit()` pushes signals asynchronously (don't return from methods)
+- `Stop()` cleanly shuts down the goroutine
+
+**Key methods:**
+- Use `s.w.Spot()` for spot trading
+- Use `s.w.Perp()` for perpetuals
+- Use `s.w.Indicators()` for technical analysis
+- Use `s.w.Emit(signal)` to send signals (not return)
+- Use `s.w.Log()` for structured logging
 
 ## Next Steps
 

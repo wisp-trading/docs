@@ -1,10 +1,12 @@
 ---
 sidebar_position: 1
+description: "Install Wisp SDK for event-driven algorithmic trading. Set up Go environment, clone repository, build CLI, and initialize your first strategy."
+keywords: ["wisp installation", "setup", "Go dependencies", "trading bot", "algorithm"]
 ---
 
 # Installation
 
-Get up and running with wisp in minutes.
+Get up and running with wisp's event-driven trading framework in minutes.
 
 ## Prerequisites
 
@@ -17,6 +19,8 @@ Check your Go version:
 ```bash
 go version
 ```
+
+Wisp uses an **event-driven architecture** where strategies own their execution loops and push signals asynchronously. This enables high-performance, responsive trading systems.
 
 ## Install wisp CLI
 
@@ -64,6 +68,17 @@ my-strategy/
 ├── config.yaml      # wisp config
 └── README.md        # Documentation
 ```
+
+## Understanding the Architecture
+
+Wisp uses an **event-driven execution model**:
+
+1. **Strategies are self-directed**: Each strategy owns its execution goroutine via `Start(ctx context.Context)`
+2. **Asynchronous signals**: Strategies call `wisp.Emit(signal)` to push trade signals
+3. **Domain separation**: Market data is organized by market type (`Spot()`, `Perp()`, `Predict()`)
+4. **Observable lifecycle**: `Stop(ctx)` cleanly shuts down, with status observability
+
+See [Writing Strategies](writing-strategies) for full pattern examples.
 
 ## Backtest Your Strategy
 

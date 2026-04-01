@@ -1,10 +1,29 @@
 ---
 sidebar_position: 5
+description: "Configure Wisp SDK for exchanges, assets, and risk parameters. Learn how config drives strategy startup and execution lifecycle."
+keywords: ["wisp configuration", "config.yaml", "exchange setup", "strategy parameters", "backtesting"]
 ---
 
 # Configuration
 
-Configure wisp for your exchange, assets, and trading parameters.
+Configure wisp for your exchanges, assets, and trading parameters. Configuration drives the startup sequence and strategy initialization.
+
+## How Configuration Drives Startup
+
+When wisp starts, the configuration orchestrates initialization:
+
+1. **Exchange configuration** → Wisp initializes connectors and market data feeds
+2. **Strategy configuration** → Parameters are loaded, strategy is created
+3. **Indicator configuration** → Data sources and timeframes are set up
+4. **Strategy.Start(ctx)** → The strategy launches its execution goroutine
+5. **Event loop** → Strategy's `run()` method begins analyzing markets and emitting signals
+
+Configuration controls:
+- Which exchanges to connect to
+- Which assets to monitor
+- How often the strategy analyzes markets (interval)
+- Default position sizes and risk limits
+- Logging verbosity
 
 ## Configuration Structure
 
@@ -50,7 +69,7 @@ risk:
 # Strategy configuration
 strategy:
   name: "my-strategy"
-  interval: "1h"           # How often GetSignals() is called
+  interval: "1h"           # Strategy's run loop tick interval
   default_exchange: binance
   assets:
     - "BTC"
@@ -64,6 +83,8 @@ backtest:
   initial_capital: 10000
   commission: 0.001        # 0.1% per trade
 ```
+
+**The `interval` setting is critical**: it controls how often your strategy's `run()` loop evaluates market conditions. When `Start(ctx)` launches the goroutine, it respects this interval via an internal ticker.
 
 :::danger Never commit API keys
 Never commit config files with API keys to version control. Keep sensitive configuration files secure and separate from your codebase.

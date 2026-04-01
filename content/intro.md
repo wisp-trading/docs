@@ -1,35 +1,82 @@
 ---
 sidebar_position: 1
+description: "Build high-performance trading strategies in Go. Wisp SDK is an event-driven framework with autonomous strategy loops, real-time market data ingestion, and multi-exchange support."
+keywords: ["trading strategy framework", "Go trading bot", "algorithmic trading SDK", "cryptocurrency trading", "market data API", "signal-based execution"]
 ---
 
-# Welcome to Wisp
+# Welcome to Wisp SDK
 
-Wisp is a Go framework that makes building trading strategies simple. Write your strategy logic once, and wisp handles all the complexity—market data, exchange APIs, indicators, and execution.
+Wisp SDK is a **production-grade, event-driven trading framework** for building autonomous trading strategies in Go. Built for speed and reliability, Wisp handles market data ingestion, technical analysis, position management, and multi-exchange execution while you focus entirely on strategy logic.
 
-## The wisp Way
+## What Makes Wisp Different
 
-Instead of managing exchange connections, API calls, and data pipelines, you write this:
+Unlike traditional trading frameworks that require you to write polling loops or explicitly manage API calls, Wisp operates on a **push-based, autonomous architecture**:
+
+- **Strategy-owned event loops** — Your strategy runs in its own goroutine and controls execution timing
+- **Asynchronous signal emission** — Push signals via `Emit()` without blocking on exchange execution
+- **Domain-scoped APIs** — Separate contexts for Spot, Perpetuals, and Prediction markets
+- **Real-time data streams** — Automatic market data ingestion via batch backfill + WebSocket updates
+- **Multi-exchange orchestration** — Binance, Bybit, Hyperliquid, and more
+
+## How It Works: The Real Pattern
+
+Instead of implementing a method the framework calls repeatedly, you create your own execution loop:
 
 ```go
-func (s *Strategy) GetSignals() ([]*strategy.Signal, error) {
-    btc := s.k.Asset("BTC")
-    
-    // Just ask for what you need - wisp figures out the rest
-    rsi, _ := s.k.Indicators().RSI(btc, 14)
-    price, _ := s.k.Market().Price(btc)
-    
-    if rsi.LessThan(decimal.NewFromInt(30)) {
-        signal := s.k.Signal(s.GetName()).
-            Buy(btc, connector.Binance, decimal.NewFromFloat(0.1)).
-            Build()
-        return []*strategy.Signal{signal}, nil
+type MomentumStrategy struct {
+    *strategy.BaseStrategy
+    wisp wisp.Wisp
+}
+
+// Your strategy owns its run loop
+func (s *MomentumStrategy) Start(ctx context.Context) error {
+    return s.StartWithRunner(ctx, s.run)  // Launch goroutine
+}
+
+// This runs in its own goroutine, controlled by you
+func (s *MomentumStrategy) run(ctx context.Context) {
+    ticker := time.NewTicker(1 * time.Minute)
+    defer ticker.Stop()
+
+    for {
+        select {
+        case <-ctx.Done():
+            return  // Clean shutdown
+        case <-ticker.C:
+            // YOUR STRATEGY LOGIC HERE
+            btcPair := s.wisp.Pair(
+                s.wisp.Asset("BTC"),
+                s.wisp.Asset("USDT"),
+            )
+
+            // Watch the pair (tells data ingestors to stream it)
+            s.wisp.Spot().WatchPair(connector.Binance, btcPair)
+
+            // Get live market data
+            price, ok := s.wisp.Spot().Price(connector.Binance, btcPair)
+            if !ok {
+                continue
+            }
+
+            // Check your signals and emit if triggered
+            if shouldBuy(price) {
+                signal := s.wisp.Spot().Signal(s.GetName()).
+                    Buy(btcPair, connector.Binance, quantity, price).
+                    Build()
+
+                s.Emit(signal)  // Non-blocking push to executor
+            }
+
+            // Report status to monitoring
+            s.EmitStatus(strategy.StrategyStatus{
+                Summary: "BTC price: " + price.String(),
+            })
+        }
     }
-    
-    return nil, nil
 }
 ```
 
-That's it. No exchange client setup. No data fetching. No indicator calculations from scratch.
+That's the real pattern. **You own the loop. You control timing. You push signals.**
 
 ## What wisp Does for You
 

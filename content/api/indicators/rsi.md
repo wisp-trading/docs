@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+description: "RSI (Relative Strength Index) indicator API. Detect oversold/overbought conditions. Returns values 0-100. Usage: RSI(pair, 14) returns decimal.Decimal."
+keywords: ["RSI", "relative strength index", "momentum", "oversold", "overbought", "indicator API"]
 ---
 
 # RSI (Relative Strength Index)
@@ -7,11 +9,16 @@ sidebar_position: 2
 ## Usage
 
 ```go
-// Basic usage
-rsi := s.k.Indicators().RSI(btc, 14)  // 14-period RSI
+// In your run() loop
+btc := s.w.Asset("BTC")
+usdt := s.w.Asset("USDT")
+pair := s.w.Pair(btc, usdt)
 
-// With options
-rsi := s.k.Indicators().RSI(btc, 14, indicators.IndicatorOptions{
+// Basic usage - 14-period RSI
+rsi := s.w.Indicators().RSI(pair, 14)
+
+// With options - specific exchange or timeframe
+rsi := s.w.Indicators().RSI(pair, 14, indicators.IndicatorOptions{
     Exchange: connector.Binance,
     Interval: "4h",
 })
@@ -20,35 +27,42 @@ rsi := s.k.Indicators().RSI(btc, 14, indicators.IndicatorOptions{
 ## In a Strategy
 
 ```go
-func (s *Strategy) GetSignals() ([]*strategy.Signal, error) {
-    btc := s.k.Asset("BTC")
-    
-    // Get 14-period RSI (standard)
-    rsi := s.k.Indicators().RSI(btc, 14)
-    
-    // Oversold: RSI < 30
-    if rsi.LessThan(decimal.NewFromInt(30)) {
-        return []*strategy.Signal{
-            s.Signal().
-                Buy(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason(fmt.Sprintf("RSI oversold at %s", rsi.StringFixed(2))).
-                Build(),
-        }, nil
+// In your run() loop
+func (s *Strategy) run(ctx context.Context) {
+    ticker := time.NewTicker(1 * time.Hour)
+    defer ticker.Stop()
+
+    btc := s.w.Asset("BTC")
+    usdt := s.w.Asset("USDT")
+    pair := s.w.Pair(btc, usdt)
+
+    for {
+        select {
+        case <-ticker.C:
+            // Get 14-period RSI (standard)
+            rsi := s.w.Indicators().RSI(pair, 14)
+
+            // Oversold: RSI < 30
+            if rsi.LessThan(decimal.NewFromInt(30)) {
+                signal := s.w.Spot().Signal(s.name).
+                    BuyMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)
+                s.w.Log().Opportunity(string(s.name), "BTC",
+                    "RSI oversold at %.2f", rsi)
+            }
+
+            // Overbought: RSI > 70
+            if rsi.GreaterThan(decimal.NewFromInt(70)) {
+                signal := s.w.Spot().Signal(s.name).
+                    SellMarket(pair, connector.Binance, decimal.NewFromFloat(0.1)).
+                    Build()
+                s.w.Emit(signal)
+                s.w.Log().Opportunity(string(s.name), "BTC",
+                    "RSI overbought at %.2f", rsi)
+            }
+        }
     }
-    
-    // Overbought: RSI > 70
-    if rsi.GreaterThan(decimal.NewFromInt(70)) {
-        return []*strategy.Signal{
-            s.Signal().
-                Sell(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason(fmt.Sprintf("RSI overbought at %s", rsi.StringFixed(2))).
-                Build(),
-        }, nil
-    }
-    
-    return nil, nil
 }
 ```
 
@@ -300,77 +314,7 @@ if rsi.LessThan(oversoldLevel) {
 
 ## Complete Example
 
-```go
-package main
-
-import (
-    "github.com/wisp-trading/sdk/pkg/types/wisp"
-    "github.com/wisp-trading/sdk/pkg/types/strategy"
-    "github.com/shopspring/decimal"
-)
-
-type RSIStrategy struct {
-    strategy.BaseStrategy
-    k wisp.wisp
-}
-
-func NewRSI(k wisp.wisp) strategy.Strategy {
-    return &RSIStrategy{k: k}
-}
-
-func (s *RSIStrategy) GetSignals() ([]*strategy.Signal, error) {
-    btc := s.k.Asset("BTC")
-    
-    // Multi-timeframe RSI
-    rsi4h := s.k.Indicators().RSI(btc, 14, indicators.IndicatorOptions{
-        Interval: "4h",
-    })
-    rsi1h := s.k.Indicators().RSI(btc, 14, indicators.IndicatorOptions{
-        Interval: "1h",
-    })
-    
-    // Trend filter
-    price := s.k.Market().Price(btc)
-    ema200 := s.k.Indicators().EMA(btc, 200, indicators.IndicatorOptions{
-        Interval: "4h",
-    })
-    
-    inUptrend := price.GreaterThan(ema200)
-    
-    // Buy: uptrend + 4h not overbought + 1h oversold
-    if inUptrend &&
-       rsi4h.LessThan(decimal.NewFromInt(70)) &&
-       rsi1h.LessThan(decimal.NewFromInt(30)) {
-        
-        return []*strategy.Signal{
-            s.Signal().
-                Buy(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason("Uptrend with 1h RSI oversold").
-                Build(),
-        }, nil
-    }
-    
-    // Sell: 1h RSI overbought
-    if rsi1h.GreaterThan(decimal.NewFromInt(70)) {
-        return []*strategy.Signal{
-            s.Signal().
-                Sell(btc).
-                Quantity(decimal.NewFromFloat(0.1)).
-                Reason("1h RSI overbought").
-                Build(),
-        }, nil
-    }
-    
-    return nil, nil
-}
-
-// Interface methods
-func (s *RSIStrategy) GetName() strategy.StrategyName { return "RSI" }
-func (s *RSIStrategy) GetDescription() string { return "Multi-timeframe RSI strategy" }
-func (s *RSIStrategy) GetRiskLevel() strategy.RiskLevel { return strategy.RiskLevelMedium }
-func (s *RSIStrategy) GetStrategyType() strategy.StrategyType { return strategy.StrategyTypeTechnical }
-```
+See the [RSI Strategy Example](../../examples/basic/rsi) for a complete, production-ready implementation using the Start/run/Emit pattern.
 
 ## See Also
 
