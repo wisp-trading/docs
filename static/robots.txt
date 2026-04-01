@@ -1,0 +1,38 @@
+# Wisp SDK Documentation - Robots.txt
+# This file helps search engines crawl and index the documentation
+
+User-agent: *
+Allow: /
+
+# Explicitly allow major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Sitemap location - tells search engines where to find the full list of pages
+Sitemap: https://usewisp.dev/docs/sitemap.xml
+
+# Crawl delay to be respectful of server resources
+# 1 second delay between requests
+Crawl-delay: 1
+
+# Avoid crawling generated/temporary files
+Disallow: /.next/
+Disallow: /_next/
+Disallow: /static/
+Disallow: /*.json$
+
+# Allow search engines to crawl JavaScript for rendering
+# (Google, Bing, and others can crawl and render JS)
+Allow: *.js
+Allow: *.css
+Allow: *.woff
+Allow: *.woff2

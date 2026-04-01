@@ -5,9 +5,53 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Wisp',
-  tagline: 'The Traders Framework',
+  title: 'Wisp SDK Documentation',
+  tagline: 'Event-Driven Trading Framework for Go',
   favicon: 'img/favicon.ico',
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'og:type',
+        content: 'website',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'og:site_name',
+        content: 'Wisp SDK Documentation',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'og:image',
+        content: 'https://usewisp.dev/docs/img/docusaurus-social-card.jpg',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'description',
+        content: 'Production-grade trading strategy framework for Go. Build event-driven algorithms with real-time market data across Binance, Bybit, and Hyperliquid.',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'keywords',
+        content: 'trading, Go, framework, algorithmic trading, event-driven, cryptocurrency, exchange API',
+      },
+    },
+  ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -34,7 +78,14 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-
+  plugins: [
+    ['@docusaurus/plugin-sitemap', {
+      changefreq: 'weekly',
+      priority: 0.5,
+      filename: 'sitemap.xml',
+    }],
+  ],
+  
   presets: [
     [
       'classic',
