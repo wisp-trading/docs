@@ -40,13 +40,6 @@ const config: Config = {
     {
       tagName: 'meta',
       attributes: {
-        name: 'description',
-        content: 'Documentation for Wisp, an open-source algorithmic trading framework in Go. Build trading strategies for spot trading, perpetual futures, options, and prediction markets with sub-millisecond execution.',
-      },
-    },
-    {
-      tagName: 'meta',
-      attributes: {
         name: 'keywords',
         content: 'trading, Go, framework, algorithmic trading, event-driven, cryptocurrency, exchange API',
       },
