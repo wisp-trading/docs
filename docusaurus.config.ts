@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Wisp SDK Documentation',
-  tagline: 'Event-Driven Trading Framework for Go',
+  title: 'Wisp Documentation',
+  tagline: 'Algorithmic trading framework in Go — spot, perpetual futures, options, and prediction markets',
   favicon: 'img/favicon.ico',
   headTags: [
     {
@@ -41,7 +41,7 @@ const config: Config = {
       tagName: 'meta',
       attributes: {
         name: 'description',
-        content: 'Production-grade trading strategy framework for Go. Build event-driven algorithms with real-time market data across Binance, Bybit, and Hyperliquid.',
+        content: 'Documentation for Wisp, an open-source algorithmic trading framework in Go. Build trading strategies for spot trading, perpetual futures, options, and prediction markets with sub-millisecond execution.',
       },
     },
     {
